@@ -1,0 +1,31 @@
+services:
+  db:
+    image: postgres:16.2
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_DB=${DB_NAME}
+    volumes:
+      - db-data:/var/lib/postgresql/data
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "5000:5000" # Exposing the Node.js app on port 5000
+    environment:
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+      - DB_HOST=db # Connect to the 'db' service within Docker
+      - DB_PORT=5432
+    depends_on:
+      - db
+    volumes:
+      - ./:/src
+    working_dir: /src
+
+volumes:
+  db-data:
+    driver: local
