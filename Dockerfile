@@ -8,4 +8,5 @@ COPY . .
 
 RUN npm install
 
-CMD [ "npm", "run", "dev" ]
+# This can be added either here or in docker-compose.yml as `command: npm run dev`
+# CMD [ "npm", "run", "dev" ]
